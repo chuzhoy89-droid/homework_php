@@ -1,5 +1,7 @@
 <?php
 
+fwrite(STDOUT, "Введите 2 числа через пробел, чтобы произвести деление\n");
+
 $input = fgets(STDIN);
 
 $numbers = explode(' ', trim($input));
@@ -25,3 +27,4 @@ if ($num2 === 0) {
 
 $result = $num1 / $num2;
 fwrite(STDOUT, $result . "\n");
+
