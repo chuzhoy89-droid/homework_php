@@ -7,9 +7,6 @@ const OPERATION_ADD = 1;
 const OPERATION_DELETE = 2;
 const OPERATION_PRINT = 3;
 
-/**
- * @var array<int, string>
- */
 $operations = [
     OPERATION_EXIT => OPERATION_EXIT . '. Завершить программу.',
     OPERATION_ADD => OPERATION_ADD . '. Добавить товар в список покупок.',
@@ -17,21 +14,8 @@ $operations = [
     OPERATION_PRINT => OPERATION_PRINT . '. Отобразить список покупок.',
 ];
 
-/**
- * @var array<int, string>
- */
 $items = [];
 
-/**
- * @param array<int, string> $operations
- * @param array<int, string> &$items
- * @return int
- */
-/**
- * @param array<int, string> $operations
- * @param array<int, string> &$items
- * @return int
- */
 function displayMenuAndGetOperation(array $operations, array &$items): int {
     system('clear');
     
@@ -60,20 +44,12 @@ function displayMenuAndGetOperation(array $operations, array &$items): int {
     return $operationNumber;
 }
 
-/**
- * @param array<int, string> &$items
- * @return void
- */
 function handleAddOperation(array &$items): void {
     echo "Введите название товара для добавления в список: \n> ";
     $itemName = trim(fgets(STDIN));
     $items[] = $itemName;
 }
 
-/**
- * @param array<int, string> &$items
- * @return void
- */
 function handleDeleteOperation(array &$items): void {
     echo 'Введите название товара для удаления из списка:' . PHP_EOL . '> ';
     $itemName = trim(fgets(STDIN));
@@ -85,10 +61,6 @@ function handleDeleteOperation(array &$items): void {
     }
 }
 
-/**
- * @param array<int, string> $items
- * @return void
- */
 function handlePrintOperation(array $items): void {
     if (count($items)) {
         echo 'Ваш список покупок: ' . PHP_EOL;
@@ -124,3 +96,4 @@ do {
 } while ($operationNumber > 0);
 
 echo 'Программа завершена' . PHP_EOL;
+
