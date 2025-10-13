@@ -9,9 +9,6 @@ const OPERATION_PRINT = 3;
 const OPERATION_EDIT = 4;
 const OPERATION_SET_QUANTITY = 5;
 
-/**
- * @var array<int, array{name: string, quantity: int}>
- */
 $operations = [
     OPERATION_EXIT => OPERATION_EXIT . '. Завершить программу.',
     OPERATION_ADD => OPERATION_ADD . '. Добавить товар в список покупок.',
@@ -21,9 +18,6 @@ $operations = [
     OPERATION_SET_QUANTITY => OPERATION_SET_QUANTITY . '. Установить количество товара.',
 ];
 
-/**
- * @var array<int, array{name: string, quantity: int}>
- */
 $items = [];
 
 function displayMenuAndGetOperation(array $operations, array &$items): int {
@@ -54,10 +48,6 @@ function displayMenuAndGetOperation(array $operations, array &$items): int {
     return $operationNumber;
 }
 
-/**
- * @param array<int, array{name: string, quantity: int}> &$items
- * @return void
- */
 function handleAddOperation(array &$items): void {
     echo "Введите название товара для добавления в список: \n> ";
     $itemName = trim(fgets(STDIN));
@@ -66,16 +56,11 @@ function handleAddOperation(array &$items): void {
     $items[] = ['name' => $itemName, 'quantity' => $quantity];
 }
 
-/**
- * @param array<int, array{name: string, quantity: int}> &$items
- * @return void
- */
 function handleEditOperation(array &$items): void {
     handlePrintOperation($items);
     echo "Введите номер товара для изменения: \n> ";
     $index = (int)trim(fgets(STDIN));
     
-    // Корректируем индекс
     $realIndex = $index - 1;
     
     if (isset($items[$realIndex])) {
@@ -87,17 +72,11 @@ function handleEditOperation(array &$items): void {
     }
 }
 
-
-/**
- * @param array<int, array{name: string, quantity: int}> &$items
- * @return void
- */
 function handleSetQuantityOperation(array &$items): void {
     handlePrintOperation($items);
     echo "Введите номер товара для изменения количества: \n> ";
     $index = (int)trim(fgets(STDIN));
     
-    // Корректируем индекс
     $realIndex = $index - 1;
     
     if (isset($items[$realIndex])) {
@@ -109,16 +88,11 @@ function handleSetQuantityOperation(array &$items): void {
     }
 }
 
-/**
- * @param array<int, array{name: string, quantity: int}> &$items
- * @return void
- */
 function handleDeleteOperation(array &$items): void {
     handlePrintOperation($items);
     echo 'Введите номер товара для удаления из списка:'. PHP_EOL. '> ';
     $index = (int)trim(fgets(STDIN));
     
-    // Корректируем индекс
     $realIndex = $index - 1;
     
     if (isset($items[$realIndex])) {
@@ -129,11 +103,6 @@ function handleDeleteOperation(array &$items): void {
     }
 }
 
-
-/**
- * @param array<int, array{name: string, quantity: int}> $items
- * @return void
- */
 function handlePrintOperation(array $items): void {
     if (count($items)) {
         echo 'Ваш список покупок: ' . PHP_EOL;
@@ -177,5 +146,6 @@ do {
     
     echo "\n ----- \n";
 } while ($operationNumber > 0);
+
 
 echo 'Программа завершена' . PHP_EOL;
