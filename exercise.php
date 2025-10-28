@@ -15,42 +15,62 @@ function generateWorkSchedule($year, $month) {
         ];
     }
     
-    // Начальная точка - первый рабочий день месяца
-    $isWorking = true;
-    $offDays = 0;
-    
-    foreach ($schedule as &$day) {
-        // Получаем день недели
-        $date = new DateTime("$year-$month-". $day['date']);
-        $dayOfWeek = (int)$date->format('N');
-        
-        // Если это выходной день, пропускаем его
-        if ($dayOfWeek == 6 || $dayOfWeek == 7) {
-            continue;
-        }
-        
-        // Устанавливаем статус дня
-        if ($isWorking) {
-            $day['isWorking'] = true;
-            $isWorking = false;
-        } else {
-            $offDays++;
-            if ($offDays >= 2) {
-                $isWorking = true;
-                $offDays = 0;
-            }
+// Начальная точка - первый рабочий день месяца
+$isWorkingDay = true;
+$offDaysCount = 0;
+
+foreach ($schedule as &$day) {
+    $date = new DateTime($year . '-' . $month . '-' . $day['date']);
+    $dayOfWeek = (int)$date->format('N'); // 1-7 (пн-вс)
+
+
+    // Если это суббота или воскресенье — всегда выходной
+    if ($dayOfWeek >= 6) {
+        $day['isWorking'] = false;
+        $isWorkingDay = true;  // Сбрасываем цикл: после выходных первый день — рабочий
+        $offDaysCount = 0;
+        continue;
+    }
+
+    // Логика графика для рабочих дней
+    if ($isWorkingDay) {
+        $day['isWorking'] = true;
+        $isWorkingDay = false;
+        $offDaysCount = 0;
+    } else {
+        $day['isWorking'] = false;
+        $offDaysCount++;
+
+        if ($offDaysCount >= 2) {
+            $isWorkingDay = true;
+            $offDaysCount = 0;
         }
     }
+}
     
-    return $schedule;
+return $schedule;
 }
 
-// Обработка входных параметров
+// Обработка входных параметров (CLI и веб)
 $defaultYear = date('Y');
 $defaultMonth = date('m');
 
-$year = isset($_GET['year']) ? (int)$_GET['year'] : $defaultYear;
-$month = isset($_GET['month']) ? (int)$_GET['month'] : $defaultMonth;
+if (php_sapi_name() === 'cli') {
+    // Режим командной строки: разбираем аргументы
+    $args = [];
+    foreach ($argv as $arg) {
+        if (strpos($arg, '=') !== false) {
+            list($key, $value) = explode('=', $arg, 2);
+            $args[$key] = $value;
+        }
+    }
+    $year = isset($args['year']) ? (int)$args['year'] : $defaultYear;
+    $month = isset($args['month']) ? (int)$args['month'] : $defaultMonth;
+} else {
+    // Веб‑режим: берём из $_GET
+    $year = isset($_GET['year']) ? (int)$_GET['year'] : $defaultYear;
+    $month = isset($_GET['month']) ? (int)$_GET['month'] : $defaultMonth;
+}
 
 // Основной вывод
 $monthName = date('F', mktime(0, 0, 0, $month, 1, $year));
